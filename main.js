@@ -83,3 +83,70 @@ function addElementsToPageFrom(arrayOfTasks){
         //  Appened Button To Main Div 
         div.appendChild(spanV);
         div.appendChild(span);
+        let updateContent;
+        spanV.addEventListener("click", (e) =>{
+            let update;
+          
+           if (spanV == e.target ) {
+            update = e.target.parentElement;
+            update.firstElementChild.setAttribute("contenteditable","true");
+            }
+             updateContent = update.firstElementChild.textContent;
+            
+            updatItem(event);
+            addDataToLocalStorageFrom(arrayOfTasks)
+
+        })
+        function updatItem (event) {
+          
+            let newItem = event.target.parentElement;
+            let newUpdate = newItem.firstElementChild;
+            if (input.value) {
+                newUpdate.textContent = input.value;
+            }
+            let randoM = Math.random();
+            let Local = {id : randoM, title : input.value, completed : false };
+            if (Local) {
+            let index = arrayOfTasks.indexOf(updateContent);
+            arrayOfTasks.splice(index, 1, Local);
+            console.log(arrayOfTasks);
+            }
+            input.value = "";
+            addDataToLocalStorageFrom(arrayOfTasks)
+
+        }
+
+    
+        tasksDiv.appendChild(div);
+        
+
+    });
+}
+function addDataToLocalStorageFrom(arrayOfTasks) {
+    window.localStorage.setItem("tasks", JSON.stringify(arrayOfTasks));
+}
+
+function getDataFromLocalStorage() {
+    let data = window.localStorage.getItem("tasks");
+    if (data) {
+        let tasks = JSON.parse(data);
+        addElementsToPageFrom(tasks);   
+    }
+}
+
+
+function deleteTaskWith(taskId) {
+    arrayOfTasks = arrayOfTasks.filter((task) => task.id != taskId);
+    addDataToLocalStorageFrom(arrayOfTasks);
+}
+
+function toggleStatusTaskWith(taskId) {
+    for (let i = 0; i< arrayOfTasks.length; i++) {
+        if (arrayOfTasks[i].id == taskId) {
+            arrayOfTasks[i].completed == false ? (arrayOfTasks[i].completed == true) : (arrayOfTasks[i].completed == false);
+        }
+    }
+    addDataToLocalStorageFrom(arrayOfTasks);
+
+
+}
